@@ -21,8 +21,13 @@ describe('array-util', () => {
     it('produces a valid single letter range', () => {
       expect(getLetterRange('Q', 1)).toEqual(['Q']);
     });
+
     it('produces a valid letter range starting at A', () => {
       expect(getLetterRange('A', 5)).toEqual(['A', 'B', 'C', 'D', 'E']);
+    });
+
+    it('produces a valid letter range starting at B', () => {
+      expect(getLetterRange('B', 5)).toEqual(['B', 'C', 'D', 'E', 'F']);
     });
   })
 
