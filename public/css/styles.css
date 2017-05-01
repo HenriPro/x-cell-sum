@@ -9,3 +9,7 @@ td {
   height: 25px;
   padding: 3px;
 }
+
+.current-cell {
+  background-color: pink;
+}
