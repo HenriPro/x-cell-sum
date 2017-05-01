@@ -89,6 +89,7 @@ class TableView {
     this.initCurrentCell();
     this.renderTable();
     this.renderTableBody();
+    this.renderSumRow();
     this.attachEventHandlers();
   }
 
@@ -96,6 +97,7 @@ class TableView {
     this.headerRowEl = document.querySelector('THEAD TR');
     this.sheetBodyEl = document.querySelector('TBODY');
     this.formulaBarEl = document.querySelector('#formula-bar');
+    this.sumRowEl = document.querySelector('#sum-row')
   }
 
   initCurrentCell() {
@@ -116,6 +118,7 @@ class TableView {
   renderTable() {
     this.renderTableHeader();
     this.renderTableBody();
+    this.renderSumRow();
   }
 
   renderTableHeader() {
@@ -124,6 +127,8 @@ class TableView {
       .map(colLabel => createTH(colLabel))
       .forEach(th => this.headerRowEl.appendChild(th));
   }
+
+
 
   isCurrentCell(col, row) {
     return this.currentCellLocation.col === col &&
@@ -150,24 +155,58 @@ class TableView {
     this.sheetBodyEl.appendChild(fragment);
   }
 
+  getRowSum(col){
+    let sum = 0;
+    for (let row = 0; row < this.model.numRows; row++){
+      const postion = {col: col, row: row};
+    //  sum += parseInt(this.model.getValue(postion,10));
+      let current = parseInt(this.model.getValue(postion),10);
+      if (!isNaN(current)) {
+        sum += current;
+      }
+    }
+    return sum;
+  }
+
+  getSumArray() {
+    let sumArray = [];
+    for (let col = 0; col < this.model.numCols; col++ ) {
+      sumArray.push(this.getRowSum(col));
+    }
+    return sumArray;
+  }
+
+
+  renderSumRow(){
+    removeChildren(this.sumRowEl)
+    this.getSumArray('A',this.model.numCols)
+      .map(colLabel => createTD(colLabel))
+      .forEach(td => {
+        td.className = 'sum-cell';
+        this.sumRowEl.appendChild(td);
+      });
+
+  }
+
 
   attachEventHandlers() {
     this.sheetBodyEl.addEventListener('click', this.handleSheetClick.bind(this));
+    this.formulaBarEl.addEventListener('keyup', this.handleFormulaBarChange.bind(this));
   }
 
-  isColumnHeaderRow(row) {
-    return row < 1;
+  handleFormulaBarChange(evt) {
+    const value = this.formulaBarEl.value;
+    this.model.setValue(this.currentCellLocation, value);
+    this.renderTableBody();
+    this.renderSumRow();
   }
 
   handleSheetClick(evt) {
     const col = evt.target.cellIndex;
     const row = evt.target.parentElement.rowIndex -1;
 
-    if(!this.isColumnHeaderRow(row)) {
-      this.currentCellLocation = { col: col, row: row};
-      this.renderTableBody();
-    }
-
+    this.currentCellLocation = { col: col, row: row};
+    this.renderTableBody();
     this.renderFormulaBar();
   }
 }
