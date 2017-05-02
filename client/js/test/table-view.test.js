@@ -11,6 +11,9 @@ describe('table-view', () => {
     document.documentElement.innerHTML = html;
   });
 
+
+
+
   describe('formula bar', () => {
     it('makes changes TO the value of the current cell', () => {
       //set up the initial state

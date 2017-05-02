@@ -71,6 +71,29 @@ class TableModel {
   setValue(location, value) {
     this.data[this._getCellId(location)] = value;
   }
+
+
+  getColSum(col){
+    let sum = 0;
+    for (let row = 0; row < this.numRows; row++){
+      const postion = {col: col, row: row};
+    //  sum += parseInt(this.model.getValue(postion,10));
+      let currentCellValue = parseInt(this.getValue(postion),10);
+      if (!isNaN(currentCellValue)) {
+        sum += currentCellValue;
+      }
+    }
+    return sum;
+  }
+
+  getSumArray() {
+    let sumArray = [];
+    for (let col = 0; col < this.numCols; col++ ) {
+      sumArray.push(this.getColSum(col));
+    }
+    return sumArray;
+  }
+
 }
 
 module.exports = TableModel;
@@ -155,14 +178,14 @@ class TableView {
     this.sheetBodyEl.appendChild(fragment);
   }
 
-  getRowSum(col){
+  getColSum(col){
     let sum = 0;
     for (let row = 0; row < this.model.numRows; row++){
       const postion = {col: col, row: row};
     //  sum += parseInt(this.model.getValue(postion,10));
-      let current = parseInt(this.model.getValue(postion),10);
-      if (!isNaN(current)) {
-        sum += current;
+      let currentCellValue = parseInt(this.model.getValue(postion),10);
+      if (!isNaN(currentCellValue)) {
+        sum += currentCellValue;
       }
     }
     return sum;
@@ -171,7 +194,7 @@ class TableView {
   getSumArray() {
     let sumArray = [];
     for (let col = 0; col < this.model.numCols; col++ ) {
-      sumArray.push(this.getRowSum(col));
+      sumArray.push(this.getCSum(col));
     }
     return sumArray;
   }
@@ -179,7 +202,7 @@ class TableView {
 
   renderSumRow(){
     removeChildren(this.sumRowEl)
-    this.getSumArray('A',this.model.numCols)
+    this.model.getSumArray()
       .map(colLabel => createTD(colLabel))
       .forEach(td => {
         td.className = 'sum-cell';
