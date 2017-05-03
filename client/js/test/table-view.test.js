@@ -11,6 +11,24 @@ describe('table-view', () => {
     document.documentElement.innerHTML = html;
   });
 
+  describe('Sum row', () => {
+    it('makes a row of sums', () => {
+      //set up intial state
+      const model = new TableModel(6,6);
+      const view = new TableView(model);
+      view.init();
+      //inspect intial state
+      let sumRow = document.querySelectorAll('#sum-cell');
+      expect(sumRow[2]).toBe(undefined);
+      //simulate user action
+      model.setValue({col: 2, row: 1}, '2');
+      model.setValue({col: 2, row: 2}, '2');
+      //inspect the resulting state
+      expect(sumRow[2]).toBe(4);
+
+    });
+  });
+
 
 
 
@@ -50,8 +68,8 @@ describe('table-view', () => {
       trs[1].cells[2].click();
       //inspect the resulting state
       expect(formulaBarEl.value).toBe('123');
-    })
-  })
+    });
+  });
 
   describe('table body', () => {
     it('highlights the current cell when clicked', () => {
@@ -87,7 +105,7 @@ describe('table-view', () => {
       expect(ths.length).toBe(numCols);
     });
 
-    it('fills in the values from the model'), () => {
+    it('fills in the values from the model', () => {
       //set up intial state
       const model = new TableModel(3,3);
       const view = new TableView(model);
@@ -97,8 +115,8 @@ describe('table-view', () => {
       //inspect intial state
       const trs = document.querySelectorAll('TBODY TR');
       expect(trs[1].cells[2].textContent).toBe('123');
-    }
-  })
+    });
+  });
 
 
   describe('table header', () => {
@@ -116,6 +134,6 @@ describe('table-view', () => {
 
       let labelTexts = Array.from(ths).map(el => el.textContent);
       expect(labelTexts).toEqual(['A','B','C','D','E','F'])
-    })
-  })
-})
+    });
+  });
+});
