@@ -22,8 +22,7 @@ class TableModel {
     let sum = 0;
     for (let row = 0; row < this.numRows; row++){
       const postion = {col: col, row: row};
-    //  sum += parseInt(this.model.getValue(postion,10));
-      let currentCellValue = parseInt(this.getValue(postion),10);
+      let currentCellValue = parseInt(this.getValue(postion), 10);
       if (!isNaN(currentCellValue)) {
         sum += currentCellValue;
       }
@@ -33,7 +32,7 @@ class TableModel {
 
   getSumArray() {
     let sumArray = [];
-    for (let col = 0; col < this.numCols; col++ ) {
+    for (let col = 0; col < this.numCols; col++) {
       sumArray.push(this.getColSum(col));
     }
     return sumArray;
